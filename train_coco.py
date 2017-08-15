@@ -8,11 +8,11 @@ from train.train_net import train_net
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a Single-shot detection network')
     parser.add_argument('--train-path', dest='train_path', help='train record to use',
-                        default=os.path.join(os.getcwd(), 'data/voc', 'train.rec'), type=str)
+                        default=os.path.join(os.getcwd(), 'data/cocorec', 'train.rec'), type=str)
     parser.add_argument('--train-list', dest='train_list', help='train list to use',
                         default="", type=str)
     parser.add_argument('--val-path', dest='val_path', help='validation record to use',
-                        default=os.path.join(os.getcwd(), 'data/voc', 'val.rec'), type=str)
+                        default=os.path.join(os.getcwd(), 'data/cocorec', 'val.rec'), type=str)
     parser.add_argument('--val-list', dest='val_list', help='validation list to use',
                         default="", type=str)
     parser.add_argument('--network', dest='network', type=str, default='darknet19_yolo',
@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument('--begin-epoch', dest='begin_epoch', help='begin epoch of training',
                         default=0, type=int)
     parser.add_argument('--end-epoch', dest='end_epoch', help='end epoch of training',
-                        default=300, type=int)
+                        default=240, type=int)
     parser.add_argument('--frequent', dest='frequent', help='frequency of logging',
                         default=20, type=int)
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
@@ -47,7 +47,7 @@ def parse_args():
                         default=320, help='minimum random data shape')
     parser.add_argument('--max-random-shape', dest='max_random_shape', type=int,
                         default=512, help='maximum random data shape')
-    parser.add_argument('--label-width', dest='label_width', type=int, default=350,
+    parser.add_argument('--label-width', dest='label_width', type=int, default=560,
                         help='force padding label width to sync across train and validation')
     parser.add_argument('--lr', dest='learning_rate', type=float, default=0.0001,
                         help='learning rate')
@@ -73,14 +73,12 @@ def parse_args():
                         help='log network parameters every N iters if larger than 0')
     parser.add_argument('--pattern', dest='monitor_pattern', type=str, default=".*",
                         help='monitor parameter pattern, as regex')
-    parser.add_argument('--num-class', dest='num_class', type=int, default=20,
+    parser.add_argument('--num-class', dest='num_class', type=int, default=80,
                         help='number of classes')
     parser.add_argument('--num-example', dest='num_example', type=int, default=16551,
                         help='number of image examples')
     parser.add_argument('--class-names', dest='class_names', type=str,
-                        default='aeroplane, bicycle, bird, boat, bottle, bus, \
-                        car, cat, chair, cow, diningtable, dog, horse, motorbike, \
-                        person, pottedplant, sheep, sofa, train, tvmonitor',
+                        default='person,bicycle,car,motorbike,aeroplane,bus,train,truck,boat,traffic light,fire hydrant,stop sign,parking meter,bench,bird,cat,dog,horse,sheep,cow,elephant,bear,zebra,giraffe,backpack,umbrella,handbag,tie,suitcase,frisbee,skis,snowboard,sports ball,kite,baseball bat,baseball glove,skateboard,surfboard,tennis racket,bottle,wine glass,cup,fork,knife,spoon,bowl,banana,apple,sandwich,orange,broccoli,carrot,hot dog,pizza,donut,cake,chair,sofa,pottedplant,bed,diningtable,toilet,tvmonitor,laptop,mouse,remote,keyboard,cell phone,microwave,oven,toaster,sink,refrigerator,book,clock,vase,scissors,teddy bear,hair drier,toothbrush',
                         help='string of comma separated names, or text filename')
     parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
                         help='non-maximum suppression threshold')

@@ -8,6 +8,7 @@ from symbol_darknet19 import get_symbol as get_darknet19
 from symbol_darknet19 import conv_act_layer
 
 def get_symbol(num_classes=20, nms_thresh=0.5, force_nms=False, **kwargs):
+    input_data_shape = (32, 3, 416, 416)
     bone = get_darknet19(num_classes=num_classes, **kwargs)
     conv5_5 = bone.get_internals()["conv5_5_output"]
     conv6_5 = bone.get_internals()["conv6_5_output"]
@@ -22,8 +23,19 @@ def get_symbol(num_classes=20, nms_thresh=0.5, force_nms=False, **kwargs):
         act_type='leaky')
 
     # re-organze conv5_5 and concat conv7_2
-    conv5_6 = mx.sym.stack_neighbor(data=conv5_5, kernel=(2, 2), name='stack_downsample')
-    concat = mx.sym.Concat(*[conv5_6, conv7_2], dim=1)
+    conv5_6 = conv_act_layer(conv5_5, 'conv5_6', 64, kernel=(1, 1), pad=(0, 0), act_type='leaky')
+    conv5_7 = mx.sym.stack_neighbor(data=conv5_6, kernel=(2, 2), name='stack_downsample')
+    concat = mx.sym.Concat(*[conv5_7, conv7_2], dim=1)
+    _, out_shape,_ = conv5_5.infer_shape(data=input_data_shape)
+    print 'conv5_5 shape: ', out_shape
+    _, out_shape,_ = conv5_6.infer_shape(data=input_data_shape)
+    print 'conv5_6 shape: ', out_shape
+    _, out_shape,_ = conv5_7.infer_shape(data=input_data_shape)
+    print 'conv5_7 shape: ', out_shape
+    _, out_shape,_ = conv7_2.infer_shape(data=input_data_shape)
+    print 'conv7_2 shape: ', out_shape
+    _, out_shape,_ = concat.infer_shape(data=input_data_shape)
+    print 'concat shape: ', out_shape
     # concat = conv7_2
     conv8_1 = conv_act_layer(concat, 'conv8_1', 1024, kernel=(3, 3), pad=(1, 1),
         act_type='leaky')

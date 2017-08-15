@@ -53,7 +53,7 @@ cfg.train.inter_method = 10  # random interpolation
 cfg.train.rand_mirror_prob = 0.5
 cfg.train.shuffle = True
 cfg.train.seed = 233
-cfg.train.preprocess_threads = 48
+cfg.train.preprocess_threads = 8
 cfg.train = config_as_dict(cfg.train)  # convert to normal dict
 
 # validation
