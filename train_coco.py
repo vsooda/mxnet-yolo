@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('--val-list', dest='val_list', help='validation list to use',
                         default="", type=str)
     parser.add_argument('--network', dest='network', type=str, default='darknet19_yolo',
-                        choices=['darknet19_yolo'], help='which network to use')
+                        choices=['darknet19_yolo', 'tykk3_yolo'], help='which network to use')
     parser.add_argument('--batch-size', dest='batch_size', type=int, default=16,
                         help='training batch size')
     parser.add_argument('--resume', dest='resume', type=int, default=-1,
@@ -46,7 +46,7 @@ def parse_args():
     parser.add_argument('--min-random-shape', dest='min_random_shape', type=int,
                         default=320, help='minimum random data shape')
     parser.add_argument('--max-random-shape', dest='max_random_shape', type=int,
-                        default=512, help='maximum random data shape')
+                        default=608, help='maximum random data shape')
     parser.add_argument('--label-width', dest='label_width', type=int, default=560,
                         help='force padding label width to sync across train and validation')
     parser.add_argument('--lr', dest='learning_rate', type=float, default=0.0001,
