@@ -49,7 +49,8 @@ cfg.train.rand_pad = RandPadder(rand_pad_prob=0.5, max_pad_scale=3.0)
 # random color jitter
 cfg.train.color_jitter = ColorJitter(random_hue_prob=0.5, random_saturation_prob=0.5,
     random_illumination_prob=0.5, random_contrast_prob=0.5)
-cfg.train.inter_method = 10  # random interpolation
+#cfg.train.inter_method = 10  # random interpolation
+cfg.train.inter_method = 1  # bilinear
 cfg.train.rand_mirror_prob = 0.5
 cfg.train.shuffle = True
 cfg.train.seed = 233

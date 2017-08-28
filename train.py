@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument('--begin-epoch', dest='begin_epoch', help='begin epoch of training',
                         default=0, type=int)
     parser.add_argument('--end-epoch', dest='end_epoch', help='end epoch of training',
-                        default=300, type=int)
+                        default=500, type=int)
     parser.add_argument('--frequent', dest='frequent', help='frequency of logging',
                         default=20, type=int)
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
@@ -42,7 +42,7 @@ def parse_args():
     parser.add_argument('--random-shape-step', dest='random_shape_step', type=int,
                         default=32, help='random data shape step')
     parser.add_argument('--random-shape-epoch', dest='random_shape_epoch', type=int,
-                        default=10, help='random shape epoch')
+                        default=1, help='random shape epoch')
     parser.add_argument('--min-random-shape', dest='min_random_shape', type=int,
                         default=320, help='minimum random data shape')
     parser.add_argument('--max-random-shape', dest='max_random_shape', type=int,
@@ -82,9 +82,9 @@ def parse_args():
                         car, cat, chair, cow, diningtable, dog, horse, motorbike, \
                         person, pottedplant, sheep, sofa, train, tvmonitor',
                         help='string of comma separated names, or text filename')
-    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
+    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.4,
                         help='non-maximum suppression threshold')
-    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.5,
+    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.6,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
