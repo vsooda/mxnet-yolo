@@ -14,11 +14,11 @@ CLASSES = ('aeroplane', 'bicycle', 'bird', 'boat',
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate a network')
     parser.add_argument('--rec-path', dest='rec_path', help='which record file to use',
-                        default=os.path.join(os.getcwd(), 'data', 'val.rec'), type=str)
+                        default=os.path.join(os.getcwd(), 'data/voc', 'val.rec'), type=str)
     parser.add_argument('--list-path', dest='list_path', help='which list file to use',
                         default="", type=str)
-    parser.add_argument('--network', dest='network', type=str, default='vgg16_ssd_300',
-                        choices=['vgg16_ssd_300', 'vgg16_ssd_512'], help='which network to use')
+    parser.add_argument('--network', dest='network', type=str, default='darknet19_yolo',
+                        choices=['darknet19_yolo', 'tykk3_yolo'], help='which network to use')
     parser.add_argument('--batch-size', dest='batch_size', type=int, default=32,
                         help='evaluation batch size')
     parser.add_argument('--num-class', dest='num_class', type=int, default=20,
@@ -28,22 +28,22 @@ def parse_args():
     parser.add_argument('--epoch', dest='epoch', help='epoch of pretrained model',
                         default=0, type=int)
     parser.add_argument('--prefix', dest='prefix', help='load model prefix',
-                        default=os.path.join(os.getcwd(), 'model', 'ssd'), type=str)
+                        default=os.path.join(os.getcwd(), 'model', 'yolo2_darknet19'), type=str)
     parser.add_argument('--gpus', dest='gpu_id', help='GPU devices to evaluate with',
                         default='0', type=str)
     parser.add_argument('--cpu', dest='cpu', help='use cpu to evaluate, this can be slow',
                         action='store_true')
-    parser.add_argument('--data-shape', dest='data_shape', type=int, default=300,
+    parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
                         help='set image shape')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123,
+    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123.68,
                         help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=117,
+    parser.add_argument('--mean-g', dest='mean_g', type=float, default=116.779,
                         help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=104,
+    parser.add_argument('--mean-b', dest='mean_b', type=float, default=103.939,
                         help='blue mean value')
     parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
                         help='non-maximum suppression threshold')
-    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.5,
+    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.6,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
