@@ -35,19 +35,19 @@ def parse_args():
                         action='store_true')
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
                         help='set image shape')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123.68,
+    parser.add_argument('--mean-r', dest='mean_r', type=float, default=0,
                         help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=116.779,
+    parser.add_argument('--mean-g', dest='mean_g', type=float, default=0,
                         help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=103.939,
+    parser.add_argument('--mean-b', dest='mean_b', type=float, default=0,
                         help='blue mean value')
-    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
+    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.4,
                         help='non-maximum suppression threshold')
-    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.6,
+    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.0,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
-    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=False,
+    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=True,
                         help='use difficult ground-truths in evaluation')
     parser.add_argument('--voc07', dest='use_voc07_metric', type=bool, default=True,
                         help='use PASCAL VOC 07 metric')

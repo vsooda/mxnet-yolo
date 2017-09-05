@@ -62,8 +62,9 @@ def evaluate_net(net, path_imgrec, num_classes, mean_pixels, data_shape,
     assert len(data_shape) == 3 and data_shape[0] == 3
     model_prefix += '_' + str(data_shape[1])
 
+
     # iterator
-    eval_iter = DetRecordIter(path_imgrec, batch_size, data_shape,
+    eval_iter = DetRecordIter(path_imgrec, batch_size, data_shape,mean_pixels=mean_pixels,
                               path_imglist=path_imglist, **cfg.valid)
     # model params
     load_net, args, auxs = mx.model.load_checkpoint(model_prefix, epoch)
@@ -83,6 +84,7 @@ def evaluate_net(net, path_imgrec, num_classes, mean_pixels, data_shape,
         fixed_param_names=net.list_arguments())
     mod.bind(data_shapes=eval_iter.provide_data, label_shapes=eval_iter.provide_label)
     mod.set_params(args, auxs, allow_missing=False, force_init=True)
+
 
     # run evaluation
     if voc07_metric:

@@ -63,11 +63,11 @@ def parse_args():
                         help='GPU device id to detect with')
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
                         help='set image shape')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123,
+    parser.add_argument('--mean-r', dest='mean_r', type=float, default=0,
                         help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=117,
+    parser.add_argument('--mean-g', dest='mean_g', type=float, default=0,
                         help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=104,
+    parser.add_argument('--mean-b', dest='mean_b', type=float, default=0,
                         help='blue mean value')
     parser.add_argument('--thresh', dest='thresh', type=float, default=0.5,
                         help='object visualize score threshold, default 0.6')

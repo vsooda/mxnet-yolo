@@ -55,11 +55,11 @@ def parse_args():
                         help='momentum')
     parser.add_argument('--wd', dest='weight_decay', type=float, default=0.0005,
                         help='weight decay')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123.68,
+    parser.add_argument('--mean-r', dest='mean_r', type=float, default=0,
                         help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=116.779,
+    parser.add_argument('--mean-g', dest='mean_g', type=float, default=0,
                         help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=103.939,
+    parser.add_argument('--mean-b', dest='mean_b', type=float, default=0,
                         help='blue mean value')
     parser.add_argument('--lr-steps', dest='lr_refactor_step', type=str, default='150, 200',
                         help='refactor learning rate at specified epochs')
@@ -84,11 +84,11 @@ def parse_args():
                         help='string of comma separated names, or text filename')
     parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.4,
                         help='non-maximum suppression threshold')
-    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.6,
+    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.0,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
-    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=False,
+    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=True,
                         help='use difficult ground-truths in evaluation')
     parser.add_argument('--voc07', dest='use_voc07_metric', type=bool, default=True,
                         help='use PASCAL VOC 07 11-point metric')
