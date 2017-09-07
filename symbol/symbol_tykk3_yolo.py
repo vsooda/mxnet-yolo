@@ -25,5 +25,5 @@ def get_symbol(num_classes=20, nms_thresh=0.5, force_nms=False, **kwargs):
     out = mx.contrib.symbol.YoloOutput(data=pred, num_class=num_classes,
         num_anchor=num_anchor, object_grad_scale=5.0, background_grad_scale=1.0,
         coord_grad_scale=1.0, class_grad_scale=1.0, anchors=anchors,
-        nms_topk=400, warmup_samples=12800, name='yolo_output')
+        nms_topk=kwargs['nms_topk'], nms_threshold=nms_thresh, force_suppress=force_nms, warmup_samples=12800, name='yolo_output')
     return out
