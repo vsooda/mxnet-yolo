@@ -161,6 +161,54 @@ class Detector(object):
                                     fontsize=12, color='white')
         plt.show()
 
+    def gen_coco_json(self, im_list, thresh, save_json):
+        import cv2
+        import json
+        import os
+        dets = self.im_detect(im_list)
+        print('detect ok')
+        key_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 31,
+                    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                    58, 59, 60, 61, 62, 63, 64, 65, 67, 70, 72, 73, 74,
+                    75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90]
+        key_map = {}
+        for i in xrange(len(key_list)):
+            key_map[i] = key_list[i]
+        results = []
+        for k, det in enumerate(dets):
+            img_name = im_list[k]
+            img = cv2.imread(im_list[k])
+            height = img.shape[0]
+            width = img.shape[1]
+            for i in range(det.shape[0]):
+                cls_id = int(det[i,0])
+                cls_id = key_map[cls_id]
+                if cls_id >= 0:
+                    score = det[i,1]
+                    if score > thresh:
+                        xmin = int(det[i, 2] * width)
+                        ymin = int(det[i, 3] * height)
+                        xmax = int(det[i, 4] * width)
+                        ymax = int(det[i, 5] * height)
+                        h = ymax - ymin
+                        w = xmax - xmin
+
+                        result = {}
+                        result['image_id'] = os.path.splitext(os.path.basename(img_name))[0]
+                        result['category_id'] = cls_id
+                        rect_value = [xmin, ymin, w, h]
+                        result['bbox'] = rect_value
+                        result['score'] = float(score)
+
+                        results.append(result)
+                    else:
+                        print("score %.4f" % score)
+                else:
+                    print("clssid %d" % cls_id)
+
+        with open('result.json', 'w') as fp:
+            json.dump(results, fp, indent=4)
+        #print(json.dumps(results, indent=4))
     def detect_and_visualize(self, im_list, root_dir=None, extension=None,
                              classes=[], thresh=0.6, show_timer=False):
         """

@@ -5,17 +5,19 @@ import os
 import sys
 from train.train_net import train_net
 
+CLASSES = ('person','bicycle','car','motorbike','aeroplane','bus','train','truck','boat','traffic light','fire hydrant','stop sign','parking meter','bench','bird','cat','dog','horse','sheep','cow','elephant','bear','zebra','giraffe','backpack','umbrella','handbag','tie','suitcase','frisbee','skis','snowboard','sports ball','kite','baseball bat','baseball glove','skateboard','surfboard','tennis racket','bottle','wine glass','cup','fork','knife','spoon','bowl','banana','apple','sandwich','orange','broccoli','carrot','hot dog','pizza','donut','cake','chair','sofa','pottedplant','bed','diningtable','toilet','tvmonitor','laptop','mouse','remote','keyboard','cell phone','microwave','oven','toaster','sink','refrigerator','book','clock','vase','scissors','teddy bear','hair drier','toothbrush')
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a Single-shot detection network')
     parser.add_argument('--train-path', dest='train_path', help='train record to use',
                         default=os.path.join(os.getcwd(), 'data/cocorec', 'train.rec'), type=str)
     parser.add_argument('--train-list', dest='train_list', help='train list to use',
-                        default="", type=str)
+                        default="data/voc", type=str)
     parser.add_argument('--val-path', dest='val_path', help='validation record to use',
                         default=os.path.join(os.getcwd(), 'data/cocorec', 'val.rec'), type=str)
     parser.add_argument('--val-list', dest='val_list', help='validation list to use',
-                        default="", type=str)
-    parser.add_argument('--network', dest='network', type=str, default='darknet19_yolo',
+                        default="data/voc", type=str)
+    parser.add_argument('--network', dest='network', type=str, default='tykk3_yolo',
                         choices=['darknet19_yolo', 'tykk3_yolo'], help='which network to use')
     parser.add_argument('--batch-size', dest='batch_size', type=int, default=16,
                         help='training batch size')
@@ -34,7 +36,7 @@ def parse_args():
     parser.add_argument('--begin-epoch', dest='begin_epoch', help='begin epoch of training',
                         default=0, type=int)
     parser.add_argument('--end-epoch', dest='end_epoch', help='end epoch of training',
-                        default=240, type=int)
+                        default=1000, type=int)
     parser.add_argument('--frequent', dest='frequent', help='frequency of logging',
                         default=20, type=int)
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=416,
@@ -46,7 +48,7 @@ def parse_args():
     parser.add_argument('--min-random-shape', dest='min_random_shape', type=int,
                         default=320, help='minimum random data shape')
     parser.add_argument('--max-random-shape', dest='max_random_shape', type=int,
-                        default=608, help='maximum random data shape')
+                        default=512, help='maximum random data shape')
     parser.add_argument('--label-width', dest='label_width', type=int, default=560,
                         help='force padding label width to sync across train and validation')
     parser.add_argument('--lr', dest='learning_rate', type=float, default=0.0001,
@@ -55,13 +57,13 @@ def parse_args():
                         help='momentum')
     parser.add_argument('--wd', dest='weight_decay', type=float, default=0.0005,
                         help='weight decay')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=123.68,
+    parser.add_argument('--mean-r', dest='mean_r', type=float, default=0,
                         help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=116.779,
+    parser.add_argument('--mean-g', dest='mean_g', type=float, default=0,
                         help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=103.939,
+    parser.add_argument('--mean-b', dest='mean_b', type=float, default=0,
                         help='blue mean value')
-    parser.add_argument('--lr-steps', dest='lr_refactor_step', type=str, default='150, 200',
+    parser.add_argument('--lr-steps', dest='lr_refactor_step', type=str, default='350, 500',
                         help='refactor learning rate at specified epochs')
     parser.add_argument('--lr-factor', dest='lr_refactor_ratio', type=str, default=0.1,
                         help='ratio to refactor learning rate')
@@ -78,17 +80,17 @@ def parse_args():
     parser.add_argument('--num-example', dest='num_example', type=int, default=16551,
                         help='number of image examples')
     parser.add_argument('--class-names', dest='class_names', type=str,
-                        default='person,bicycle,car,motorbike,aeroplane,bus,train,truck,boat,traffic light,fire hydrant,stop sign,parking meter,bench,bird,cat,dog,horse,sheep,cow,elephant,bear,zebra,giraffe,backpack,umbrella,handbag,tie,suitcase,frisbee,skis,snowboard,sports ball,kite,baseball bat,baseball glove,skateboard,surfboard,tennis racket,bottle,wine glass,cup,fork,knife,spoon,bowl,banana,apple,sandwich,orange,broccoli,carrot,hot dog,pizza,donut,cake,chair,sofa,pottedplant,bed,diningtable,toilet,tvmonitor,laptop,mouse,remote,keyboard,cell phone,microwave,oven,toaster,sink,refrigerator,book,clock,vase,scissors,teddy bear,hair drier,toothbrush',
+                        default=",".join(CLASSES),
                         help='string of comma separated names, or text filename')
-    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
+    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.4,
                         help='non-maximum suppression threshold')
-    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.5,
+    parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.0,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
-    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=False,
+    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=True,
                         help='use difficult ground-truths in evaluation')
-    parser.add_argument('--voc07', dest='use_voc07_metric', type=bool, default=True,
+    parser.add_argument('--voc07', dest='use_voc07_metric', type=bool, default=False,
                         help='use PASCAL VOC 07 11-point metric')
     args = parser.parse_args()
     return args
