@@ -176,6 +176,7 @@ class Detector(object):
             key_map[i] = key_list[i]
         results = []
         for k, det in enumerate(dets):
+            print('output: %d' % k)
             img_name = im_list[k]
             img = cv2.imread(im_list[k])
             height = img.shape[0]
@@ -186,6 +187,7 @@ class Detector(object):
                 if cls_id >= 0:
                     score = det[i,1]
                     if score > thresh:
+                        #print("%.5f %.5f %.5f %.5f %.5f" % (score, det[i,2], det[i,3], det[i,4], det[i,5]))
                         xmin = int(det[i, 2] * width)
                         ymin = int(det[i, 3] * height)
                         xmax = int(det[i, 4] * width)
@@ -194,19 +196,18 @@ class Detector(object):
                         w = xmax - xmin
 
                         result = {}
-                        result['image_id'] = os.path.splitext(os.path.basename(img_name))[0]
+                        image_id = os.path.splitext(os.path.basename(img_name))[0]
+                        ids = image_id.split("_")
+                        image_id = int(ids[-1])
+                        result['image_id'] = image_id
                         result['category_id'] = cls_id
                         rect_value = [xmin, ymin, w, h]
                         result['bbox'] = rect_value
                         result['score'] = float(score)
 
                         results.append(result)
-                    else:
-                        print("score %.4f" % score)
-                else:
-                    print("clssid %d" % cls_id)
 
-        with open('result.json', 'w') as fp:
+        with open('coco_result.json', 'w') as fp:
             json.dump(results, fp, indent=4)
         #print(json.dumps(results, indent=4))
     def detect_and_visualize(self, im_list, root_dir=None, extension=None,

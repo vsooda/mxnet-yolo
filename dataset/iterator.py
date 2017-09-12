@@ -227,6 +227,7 @@ class DetIter(mx.io.DataIter):
                 index = self._index[self._current + i]
             # index = self.debug_index
             im_path = self._imdb.image_path_from_index(index)
+            print("reading: %s" % im_path)
             with open(im_path, 'rb') as fp:
                 img_content = fp.read()
             img = mx.img.imdecode(img_content)
