@@ -95,10 +95,24 @@ if __name__ == '__main__':
         ctx = mx.gpu(args.gpu_id)
 
     # parse image list
-    test_dir = 'data/demo/error/'
+    #test_dir = 'data/demo/'
     #test_dir = '/home/sooda/data/COCO/images/test2015/'
+    #image_list = get_file_list(test_dir)
+    test_files_test = "/home/sooda/data/COCO/test-dev.txt"
 
-    image_list = get_file_list(test_dir)
+    #ftest = open(test_files_test, 'r')
+    #image_list = ftest.readlines()
+    image_list = []
+    count = 0
+    with open(test_files_test) as f:
+        for line in f:
+            line = line.strip()
+            if len(line) == 0:
+                continue
+            image_list.append(line)
+            #count = count + 1
+            #if count > 10:
+            #    break
 
     for img in image_list:
         print img
